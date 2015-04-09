@@ -19,8 +19,8 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by Gunnar.
  */
-public class ServiceBestellen extends Activity {
-    private String servicenaam;
+public class SlotBestellen extends Activity {
+    private String slotnaam;
     private String ip;
     private int port = 4444;
 
@@ -36,8 +36,8 @@ public class ServiceBestellen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_service_bestellen);
-        servicenaam = InfoScherm.servicenaam;
+        setContentView(R.layout.activity_slot_bestellen);
+        slotnaam = InfoScherm.slotnaam;
         ip = HomeFragment.serverIp;
         setTitle("Service aanvragen");
         final TextView koperNaam = (TextView) findViewById(R.id.naamVeld);
@@ -51,10 +51,10 @@ public class ServiceBestellen extends Activity {
         koperEmail.setText(email);
 
         final TextView serviceNaam = (TextView) findViewById(R.id.serviceNaam);
-        serviceNaam.setText("U staat op het punt om de service: " + servicenaam + " aan te vragen. Vul hieronder uw gegevens in om uw aanvraag te bevestigen.");
+        serviceNaam.setText("U staat op het punt om de service: " + slotnaam + " aan te vragen. Vul hieronder uw gegevens in om uw aanvraag te bevestigen.");
         final TextView serviceBeknopteinformatie = (TextView) findViewById(R.id.aanvraagBeknopteinformatie);
         try{
-            serviceBeknopteinformatie.setText("Service: " + servicenaam + ", " + HomeFragment.beknopteInformatielijst.get(HomeFragment.selectedPosition).getString("informatiebeknopt"));
+            serviceBeknopteinformatie.setText("Service: " + slotnaam + ", " + HomeFragment.beknopteInformatielijst.get(HomeFragment.selectedPosition).getString("informatiebeknopt"));
         }
         catch(JSONException e)
         {
@@ -79,7 +79,7 @@ public class ServiceBestellen extends Activity {
                 telefoon = koperTelefoon.getText().toString();
                 email = koperEmail.getText().toString();
 
-                Intent i = new Intent(ServiceBestellen.this, InfoScherm.class);
+                Intent i = new Intent(SlotBestellen.this, InfoScherm.class);
 
                 startActivity(i);
             }
@@ -107,7 +107,7 @@ public class ServiceBestellen extends Activity {
 
         try {
             //JSONObjects invullen met de juiste gegevens
-            service.put("servicenaam", servicenaam);
+            service.put("slotnaam", slotnaam);
             gegevens.put("kopernaam", naam);
             gegevens.put("koperadres", adres);
             gegevens.put("kopertelnr", telefoon);
@@ -138,12 +138,12 @@ public class ServiceBestellen extends Activity {
         }
         if(response == null)
         {
-            Toast.makeText(ServiceBestellen.this, "Server is momenteel niet bereikbaar", Toast.LENGTH_LONG).show();
+            Toast.makeText(SlotBestellen.this, "Server is momenteel niet bereikbaar", Toast.LENGTH_LONG).show();
         }
         else{
             responseFix = response.replace("null", "");
 
-            Toast.makeText(ServiceBestellen.this, responseFix, Toast.LENGTH_LONG).show();
+            Toast.makeText(SlotBestellen.this, responseFix, Toast.LENGTH_LONG).show();
             bestelknop.setVisibility(View.GONE);
 
         }
@@ -160,7 +160,7 @@ public class ServiceBestellen extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_service_bestellen, menu);
+        getMenuInflater().inflate(R.menu.menu_slot_bestellen, menu);
         return true;
     }
 

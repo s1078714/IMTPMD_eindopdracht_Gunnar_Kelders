@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -49,8 +50,9 @@ public class ServerCommunicator extends AsyncTask<Void, Void, String> {
     @Override
     protected String doInBackground(Void... params) {
         try {
+            InetAddress inetServer = InetAddress.getByName(ip);
             Socket serverSocket = new Socket();
-            serverSocket.connect(new InetSocketAddress(this.ip, this.port), 4444);
+            serverSocket.connect(new InetSocketAddress(inetServer, this.port), 4444);
 
             //verzend een bericht naar de server
             this.sendMessage(message, serverSocket);

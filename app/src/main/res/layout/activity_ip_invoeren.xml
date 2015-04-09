@@ -15,11 +15,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
+        android:text="@+id/ipadres"
         android:hint="IP adres"
         android:layout_alignStart="@+id/textView6"
+        android:layout_alignLeft="@+id/textView6"
         android:layout_marginTop="35dp"
         android:layout_below="@+id/textView5"
-        android:layout_alignEnd="@+id/textView6" />
+        android:layout_alignEnd="@+id/textView6"
+        android:layout_alignRight="@+id/textView6"/>
 
     <Button
         android:id="@+id/ipKnop"

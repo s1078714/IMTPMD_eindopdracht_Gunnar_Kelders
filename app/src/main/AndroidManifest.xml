@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.s1078714.desleutelaar.InfoScherm"
+            android:label="De Sleutelaar" >
+        </activity>
     </application>
 
 </manifest>

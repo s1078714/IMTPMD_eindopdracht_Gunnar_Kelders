@@ -15,7 +15,7 @@ import org.json.JSONException;
 public class InfoScherm extends Activity {
     public static String ip;
     public static int port;
-    public static String servicenaam;
+    public static String slotnaam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +23,17 @@ public class InfoScherm extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_info_scherm);
-        // ip adres, port en de gekozen servicenaam ophalen van HomeFragment
+        // ip adres, port en de gekozen slotnaam ophalen van HomeFragment
         ip = HomeFragment.serverIp;
         port = HomeFragment.serverPort;
-        servicenaam = HomeFragment.servicenaam;
+        slotnaam = HomeFragment.slotnaam;
 
         //zet titel van de pagina
-        setTitle("Service informatie");
+        setTitle("Slot informatie");
 
         //velden vullen met de benodigde teksten
-        TextView infoServiceNaam = (TextView) findViewById(R.id.infoServiceNaam);
-        infoServiceNaam.setText("Service: " + servicenaam);
+        TextView infoSlotNaam = (TextView) findViewById(R.id.infoSlotNaam);
+        infoSlotNaam.setText("Slot: " + slotnaam);
         TextView InfoVeld = (TextView) findViewById(R.id.infoVeld);
         try{
             InfoVeld.setText(HomeFragment.informatieLijst.get(HomeFragment.selectedPosition).getString("informatie"));
@@ -61,7 +61,7 @@ public class InfoScherm extends Activity {
 
         bestelKnop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent bestel = new Intent(getApplicationContext(), ServiceBestellen.class);
+                Intent bestel = new Intent(getApplicationContext(), SlotBestellen.class);
 
                 startActivity(bestel);
             }

@@ -27,16 +27,16 @@ import java.util.concurrent.ExecutionException;
  */
 public class HomeFragment extends Fragment {
 
-    public static String serverIp;
+    public static String serverIp = "80.114.142.171";
     public static int serverPort = 4444;
-    public static ArrayList<String> serviceLijst;
+    public static ArrayList<String> slotenLijst;
     public static ArrayList<JSONObject> beknopteInformatielijst;
     public static ArrayList<JSONObject> informatieLijst;
 
     public static String informatiebeknopt = null;
     private static View rootview;
-    private Spinner service_spinner;
-    public static String servicenaam;
+    private Spinner slot_spinner;
+    public static String slotnaam;
     public static Boolean gegevensOpgehaald = false;
     public static int selectedPosition;
 
@@ -51,18 +51,18 @@ public class HomeFragment extends Fragment {
             dataInvullen();
         } else {
             dataInvullen();
-            service_spinner.setSelection(selectedPosition);
+            slot_spinner.setSelection(selectedPosition);
         }
         return rootview;
 
     }
     public void dataOphalen() {
 
-        //ophalen van de diverse services
-        serviceLijst = new ArrayList<String>();
+        //ophalen van de diverse sloten
+        slotenLijst = new ArrayList<String>();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("servicelijst", "");
+            jsonObject.put("slotenlijst", "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment {
 
             JSONObject jObject = null;
             String value = null;
-            serviceLijst = new ArrayList<String>();
+           slotenLijst = new ArrayList<String>();
 
             for (int i = 0; i < JArray.length(); i++) {
                 try {
@@ -108,15 +108,15 @@ public class HomeFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                serviceLijst.add(value);
+                slotenLijst.add(value);
 
             }
             // haal beknopte informatie op
             beknopteInformatielijst = new ArrayList<JSONObject>();
             JSONObject beknoptjObject = new JSONObject();
             try {
-                for (int i = 0; i < serviceLijst.size(); i++) {
-                    beknoptjObject.put("informatiebeknopt", serviceLijst.get(i));
+                for (int i = 0; i < slotenLijst.size(); i++) {
+                    beknoptjObject.put("informatiebeknopt", slotenLijst.get(i));
                     try {
                         try {
                             informatiebeknopt = new ServerCommunicator(serverIp,
@@ -141,8 +141,8 @@ public class HomeFragment extends Fragment {
             informatieLijst = new ArrayList<JSONObject>();
             JSONObject informatieObject = new JSONObject();
             try {
-                for (int i = 0; i < serviceLijst.size(); i++) {
-                    informatieObject.put("informatie", serviceLijst.get(i));
+                for (int i = 0; i < slotenLijst.size(); i++) {
+                    informatieObject.put("informatie", slotenLijst.get(i));
                     try {
                         try {
                             String informatie = new ServerCommunicator(serverIp,
@@ -168,16 +168,16 @@ public class HomeFragment extends Fragment {
 
     private void dataInvullen() {
         //spinner vullen met de opgehaalde data
-        service_spinner = (Spinner) rootview.findViewById(R.id.spinner);
+        slot_spinner = (Spinner) rootview.findViewById(R.id.spinner);
 
 
-        service_spinner
+        slot_spinner
                 .setAdapter(new ArrayAdapter<String>(rootview.getContext(),
                         android.R.layout.simple_spinner_dropdown_item,
-                        serviceLijst));
+                        slotenLijst));
 
 
-        service_spinner
+        slot_spinner
                 .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                     @Override
@@ -190,7 +190,7 @@ public class HomeFragment extends Fragment {
                         try {
                             // Set the text followed by the position
                             beknopteinfo.setText(beknopteInformatielijst.get(position).getString("informatiebeknopt"));
-                            servicenaam = serviceLijst.get(position);
+                            slotnaam = slotenLijst.get(position);
 
                         } catch (Exception e) {
 
@@ -209,7 +209,7 @@ public class HomeFragment extends Fragment {
         infoknop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(rootview.getContext(), InfoScherm.class);
-                selectedPosition = service_spinner.getSelectedItemPosition();
+                selectedPosition = slot_spinner.getSelectedItemPosition();
 
                 startActivity(i);
             }

@@ -73,7 +73,7 @@ public class ipInvoeren extends Activity {
         String response = null;
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("servicelijst", "");
+            jsonObject.put("slotlijst", "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -107,7 +107,7 @@ public class ipInvoeren extends Activity {
         String response = null;
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("servicelijst", "");
+            jsonObject.put("slotlijst", "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -124,7 +124,7 @@ public class ipInvoeren extends Activity {
         }
         if (response == null) {
             serverCheck = false;
-            Toast.makeText(context, "Geen verbinding met server, u kunt momenteel geen serviceaanvraag doen", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Geen verbinding met server, u kunt momenteel geen bestelling doen", Toast.LENGTH_LONG).show();
 
         } else {
             serverCheck = true;

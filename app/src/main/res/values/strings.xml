@@ -15,6 +15,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_info_scherm">InfoScherm</string>
     <string name="title_activity_ip_invoeren">ipInvoeren</string>
+    <string name="ipadres">192.168.56.1</string>
     <string name="title_activity_service_bestellen">ServiceBestellen</string>
     <string name="informatie">De Sleutelaar is uw adres voor sloten. Bij het gebruik van deze app kunt u gemakkelijker dan ooit onze sloten bestellen. Door op het hoofdscherm een slot te kiezen, kunt u vervolgens meer informatie opvragen over het slot. Als u eenmaal hebt gelezen over het slot en u wilt deze bestellen, dan is dat met slechts enkele klikken geregeld! </string>
 
