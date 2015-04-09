@@ -1,11 +1,21 @@
 package com.s1078714.desleutelaar;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Gunnar.
@@ -52,4 +62,72 @@ public class ipInvoeren extends Activity {
         });
 
 
-    }}
+    }
+
+    private void checkServer() {
+        //controleren of de server bestaat en compatibel is.
+        TextView ipVeld = (TextView) findViewById(R.id.ipInvoer);
+        ip = ipVeld.getText().toString();
+        Log.i("ip", ip);
+
+        String response = null;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("servicelijst", "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            try {
+                response = new ServerCommunicator(ip,
+                        4444, jsonObject.toString()).execute().get();
+
+            } catch (InterruptedException e) {
+
+            }
+        } catch (ExecutionException e1) {
+
+        }
+        if (response == null) {
+            serverCheck = false;
+            Toast.makeText(this, "Server reageert niet, of is niet compatibel", Toast.LENGTH_LONG).show();
+
+        } else {
+            serverCheck = true;
+            HomeFragment.serverIp = ip;
+            Toast.makeText(this, "Server succesvol verbonden", Toast.LENGTH_SHORT).show();
+            Intent startApp = new Intent(this, MainActivity.class);
+            startActivity(startApp);
+
+        }
+    }
+
+    public void ServerCheckexternal(Context context){
+        //check om voor een andere klasse de controle uit te voeren of de server nog steeds online is
+        String response = null;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("servicelijst", "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            try {
+                response = new ServerCommunicator(ip,
+                        4444, jsonObject.toString()).execute().get();
+
+            } catch (InterruptedException e) {
+
+            }
+        } catch (ExecutionException e1) {
+
+        }
+        if (response == null) {
+            serverCheck = false;
+            Toast.makeText(context, "Geen verbinding met server, u kunt momenteel geen serviceaanvraag doen", Toast.LENGTH_LONG).show();
+
+        } else {
+            serverCheck = true;
+        }
+    }
+}
