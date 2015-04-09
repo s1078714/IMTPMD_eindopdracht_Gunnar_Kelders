@@ -10,6 +10,7 @@ import android.widget.TextView;
 import org.json.JSONException;
 
 /**
+ * Created by Gunnar.
  */
 public class InfoScherm extends Activity {
     public static String ip;
@@ -67,4 +68,3 @@ public class InfoScherm extends Activity {
         });
     }
 }
-
