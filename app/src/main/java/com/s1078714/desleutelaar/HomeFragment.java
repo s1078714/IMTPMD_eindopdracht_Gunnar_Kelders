@@ -1,19 +1,29 @@
 package com.s1078714.desleutelaar;
 
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
- * Created by Gunnar on 9-4-2015.
+ * Created by Gunnar.
  */
 public class HomeFragment extends Fragment {
 
@@ -44,6 +54,166 @@ public class HomeFragment extends Fragment {
             service_spinner.setSelection(selectedPosition);
         }
         return rootview;
+
+    }
+    public void dataOphalen() {
+
+        //ophalen van de diverse services
+        serviceLijst = new ArrayList<String>();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("servicelijst", "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String response = null;
+        try {
+            try {
+                // Dit IP adres moet IP adres van server zijn.
+                response = new ServerCommunicator(serverIp,
+                        serverPort, jsonObject.toString()).execute().get();
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
+        if (response == null) {
+
+            Toast.makeText(rootview.getContext(), "Kan geen verbinding maken met de server.", Toast.LENGTH_LONG).show();
+        } else {
+            // Haal de null naam weg van de JSONArray (Voorkomt error)
+            String jsonFix = response.replace("null", "");
+
+            JSONArray JArray = null;
+            try {
+                JArray = new JSONArray(jsonFix);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JSONObject jObject = null;
+            String value = null;
+            serviceLijst = new ArrayList<String>();
+
+            for (int i = 0; i < JArray.length(); i++) {
+                try {
+                    jObject = JArray.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    value = jObject.getString("naam");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                serviceLijst.add(value);
+
+            }
+            // haal beknopte informatie op
+            beknopteInformatielijst = new ArrayList<JSONObject>();
+            JSONObject beknoptjObject = new JSONObject();
+            try {
+                for (int i = 0; i < serviceLijst.size(); i++) {
+                    beknoptjObject.put("informatiebeknopt", serviceLijst.get(i));
+                    try {
+                        try {
+                            informatiebeknopt = new ServerCommunicator(serverIp,
+                                    serverPort, beknoptjObject.toString()).execute().get();
+
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    String infoFix = informatiebeknopt.replace("null", "");
+                    JSONObject fixedjObject = new JSONObject(infoFix);
+                    beknopteInformatielijst.add(fixedjObject);
+
+                    Log.i("informatiebeknopt", infoFix);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //haal de gedetailleerde informatie op
+            informatieLijst = new ArrayList<JSONObject>();
+            JSONObject informatieObject = new JSONObject();
+            try {
+                for (int i = 0; i < serviceLijst.size(); i++) {
+                    informatieObject.put("informatie", serviceLijst.get(i));
+                    try {
+                        try {
+                            String informatie = new ServerCommunicator(serverIp,
+                                    serverPort, informatieObject.toString()).execute().get();
+                            String infoFix = informatie.replace("null", "");
+                            JSONObject fixedjObject = new JSONObject(infoFix);
+                            informatieLijst.add(fixedjObject);
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        gegevensOpgehaald = true;
+
+    }
+
+    private void dataInvullen() {
+        //spinner vullen met de opgehaalde data
+        service_spinner = (Spinner) rootview.findViewById(R.id.spinner);
+
+
+        service_spinner
+                .setAdapter(new ArrayAdapter<String>(rootview.getContext(),
+                        android.R.layout.simple_spinner_dropdown_item,
+                        serviceLijst));
+
+
+        service_spinner
+                .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                    @Override
+                    public void onItemSelected(AdapterView<?> arg0,
+                                               View arg1, int position, long arg3) {
+                        // TODO Auto-generated method stub
+                        // Locate the textviews in activity_main.xml
+                        TextView beknopteinfo = (TextView) rootview.findViewById(R.id.textView4);
+
+                        try {
+                            // Set the text followed by the position
+                            beknopteinfo.setText(beknopteInformatielijst.get(position).getString("informatiebeknopt"));
+                            servicenaam = serviceLijst.get(position);
+
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> arg0) {
+                        // TODO Auto-generated method stub
+                    }
+                });
+
+
+        Button infoknop = (Button) rootview.findViewById(R.id.infoknop);
+        infoknop.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(rootview.getContext(), InfoScherm.class);
+                selectedPosition = service_spinner.getSelectedItemPosition();
+
+                startActivity(i);
+            }
+        });
 
     }
 }
