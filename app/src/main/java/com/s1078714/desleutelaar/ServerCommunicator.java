@@ -25,6 +25,8 @@ public class ServerCommunicator extends AsyncTask<Void, Void, String> {
     private int port;
     private String response = null;
 
+//    private ProgressDialog pDialog;
+
     public ServerCommunicator(String ip, int port, String message ){
         super();
         //gegevens om naar de server te verbinden en een message te sturen
@@ -33,7 +35,16 @@ public class ServerCommunicator extends AsyncTask<Void, Void, String> {
         this.port = port;
     }
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
 
+//        pDialog = new ProgressDialog( R. );
+//        pDialog.setMessage("Gegevens laden. Een moment geduld...");
+//        pDialog.setIndeterminate(false);
+//        pDialog.setCancelable(true);
+//        pDialog.show();
+    }
 
     @Override
     protected String doInBackground(Void... params) {
