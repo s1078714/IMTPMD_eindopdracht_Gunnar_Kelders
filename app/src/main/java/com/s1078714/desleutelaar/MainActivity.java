@@ -2,6 +2,7 @@ package com.s1078714.desleutelaar;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -25,7 +26,7 @@ public class MainActivity extends Activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTitle("Mario en Co");
+        setTitle("De Sleutelaar");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
